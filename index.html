@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rafjan Motorshop | Bacoor, Cavite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
+        :root {
+            --primary: #EAB308;
+            --accent: #dc2626;
+            --bg: #020202;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Core Animations */
+        @keyframes gear-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        /* Scroll Animation States */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(60px);
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .scanline-effect {
+            background: linear-gradient(to bottom, transparent, rgba(234, 179, 8, 0.05), transparent);
+            height: 150px;
+            width: 100%;
+            position: fixed;
+            top: 0; left: 0;
+            z-index: 100;
+            pointer-events: none;
+            animation: scanline 6s linear infinite;
+        }
+
+        /* Gear Styles */
+        .gear-container {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .gear {
+            transform-box: fill-box;
+            transform-origin: center;
+            fill: none;
+            stroke: var(--primary);
+            stroke-width: 1.5;
+            transition: stroke 0.3s ease;
+        }
+
+        .gear-slow { animation: gear-rotate 25s linear infinite; }
+        .gear-med { animation: gear-rotate 15s linear infinite reverse; }
+        .gear-fast { animation: gear-rotate 8s linear infinite; }
+
+        .text-gradient {
+            background: linear-gradient(to right, #EAB308, #ffffff, #EAB308);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-card {
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .hud-float {
+            transition: transform 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .service-card:hover .icon-box {
+            transform: rotateY(180deg);
+            background: var(--primary);
+            color: black;
+        }
+
+        .icon-box {
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Logo Glow Effect */
+        .logo-container {
+            position: relative;
+        }
+        .logo-container::after {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            background: var(--primary);
+            filter: blur(15px);
+            opacity: 0;
+            border-radius: 50%;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+        .logo-container:hover::after {
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scanline-effect"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-[70] transition-all duration-500 py-8">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <div class="flex items-center gap-4 group cursor-pointer">
+                <div class="logo-container w-14 h-14 transition-transform duration-500 group-hover:scale-110">
+                    <!-- Integrated User Logo -->
+                    <img src="logo.png" alt="Rafjan Motorshop Logo" class="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(234,179,8,0.5)]">
+                </div>
+                <div class="flex flex-col leading-none">
+                    <span class="text-2xl font-black italic uppercase tracking-tighter">
+                        Rafjan<span class="text-yellow-500">Motorshop</span>
+                    </span>
+                    <span class="text-[10px] tracking-[0.4em] font-bold text-yellow-500/50 uppercase">Bacoor • Cavite</span>
+                </div>
+            </div>
+
+            <div class="hidden md:flex items-center gap-10">
+                <a href="#services" class="text-[10px] font-black tracking-[0.3em] uppercase hover:text-yellow-500 transition-colors">Services</a>
+                <a href="#parts" class="text-[10px] font-black tracking-[0.3em] uppercase hover:text-yellow-500 transition-colors">Parts</a>
+                <button class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-xl text-xs font-black italic transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-red-600/50 active:scale-95">
+                    BOOK SERVICE
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center pt-20 overflow-hidden">
+        <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-red-600/10 blur-[180px] -z-10 animate-pulse"></div>
+        <div class="absolute -bottom-40 -left-40 w-[600px] h-[600px] bg-yellow-500/5 blur-[150px] -z-10"></div>
+
+        <div class="max-w-7xl mx-auto px-6 w-full grid lg:grid-cols-2 gap-16 items-center">
+            <div class="space-y-8 relative z-10 reveal-left active">
+                <div class="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-yellow-500/20 bg-yellow-500/5 text-yellow-500 text-xs font-black tracking-[0.2em] uppercase backdrop-blur-md">
+                    <i class="fas fa-gauge-high animate-pulse"></i>
+                    Performance Tuned
+                </div>
+                
+                <h1 class="text-7xl md:text-9xl font-black italic uppercase leading-[0.8] tracking-tighter">
+                    ENGINEERED <br />
+                    <span class="text-gradient">EXCELLENCE.</span>
+                </h1>
+                
+                <p class="text-lg md:text-xl text-slate-400 max-w-lg leading-relaxed border-l-4 border-red-600 pl-8 py-2">
+                    Bacoor's specialized workshop for Fuel Injection, CVT tuning, and precision engine modification. Built for the modern rider.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-5 pt-4">
+                    <button class="w-full sm:w-auto px-12 py-6 bg-yellow-500 hover:bg-yellow-400 text-black font-black italic rounded-2xl transition-all flex items-center justify-center gap-4 group shadow-xl hover:-translate-y-1">
+                        OUR WORKSHOP
+                        <i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform"></i>
+                    </button>
+                    <button class="w-full sm:w-auto px-12 py-6 border border-white/10 hover:border-yellow-500/30 hover:bg-white/5 backdrop-blur-xl rounded-2xl font-black italic transition-all text-white text-center">
+                        GALLERY
+                    </button>
+                </div>
+            </div>
+
+            <!-- Immersive Mechanical Gear Animation -->
+            <div class="relative h-[500px] md:h-[750px] flex items-center justify-center scale-90 md:scale-110 gear-container reveal-right active">
+                <div class="absolute inset-0 bg-yellow-500/5 blur-[120px] rounded-full"></div>
+                
+                <svg viewBox="0 0 600 600" class="w-full h-full drop-shadow-[0_0_40px_rgba(234,179,8,0.25)]">
+                    <g class="gear gear-slow">
+                        <path d="M300,160 L310,140 L330,140 L340,160 L360,165 L375,150 L395,155 L400,175 L420,190 L440,185 L450,205 L445,225 L455,245 L475,255 L475,275 L460,290 L460,310 L475,325 L475,345 L455,355 L445,375 L450,395 L440,415 L420,410 L400,425 L395,445 L375,450 L360,435 L340,440 L330,460 L310,460 L300,440 L280,440 L270,460 L250,460 L240,440 L220,435 L205,450 L185,445 L180,425 L160,410 L140,415 L130,395 L135,375 L125,355 L105,345 L105,325 L120,310 L120,290 L105,275 L105,255 L125,245 L135,225 L130,205 L140,185 L160,190 L180,175 L185,155 L205,150 L220,165 L240,160 L250,140 L270,140 L280,160 Z" />
+                        <circle cx="300" cy="300" r="120" />
+                        <circle cx="300" cy="300" r="30" fill="var(--primary)" fill-opacity="0.1" />
+                        <line x1="300" y1="180" x2="300" y2="420" opacity="0.2" />
+                        <line x1="180" y1="300" x2="420" y2="300" opacity="0.2" />
+                    </g>
+                    
+                    <g class="gear gear-med" style="transform: translate(185px, 0px)">
+                        <path d="M300,210 L315,195 L335,195 L350,210 L370,215 L385,200 L405,205 L410,225 L430,240 L450,235 L460,255 L455,275 L465,295 L485,305 L485,325 L470,340 L470,360 L485,375 L485,395 L465,405 L455,425 L460,445 L450,465 L430,460 L410,475 L405,495 L385,500 L370,485 L350,490 L335,510 L315,510 L300,490 L285,510 L265,510 L250,490 L230,485 L215,500 L195,495 L190,475 L170,460 L150,465 L140,445 L145,425 L135,405 L115,395 L115,375 L130,360 L130,340 L115,325 L115,305 L135,295 L145,275 L140,255 L150,235 L170,240 L190,225 L195,205 L215,200 L230,215 L250,210 L265,195 L285,195 L300,210 Z" transform="scale(0.7) translate(120, 120)" />
+                    </g>
+
+                    <g class="gear gear-fast">
+                        <circle cx="300" cy="300" r="60" stroke-dasharray="8 4" stroke="#dc2626" opacity="0.6" />
+                    </g>
+                    
+                    <circle cx="300" cy="300" r="280" fill="none" stroke="#ffffff0a" stroke-width="1" stroke-dasharray="5,15" />
+                    <circle cx="300" cy="300" r="240" fill="none" stroke="#EAB3081a" stroke-width="2" stroke-dasharray="20,10" />
+                </svg>
+
+                <!-- Floating HUDs -->
+                <div id="hud-1" class="hud-float absolute top-1/4 right-0 glass-card p-6 rounded-[2.5rem] shadow-2xl">
+                    <div class="flex items-center gap-3 mb-2 text-red-500">
+                        <i class="fas fa-bolt animate-pulse"></i>
+                        <span class="text-[10px] font-black uppercase tracking-widest">Torque Output</span>
+                    </div>
+                    <div class="text-4xl font-black italic tracking-tighter flex items-end gap-1">
+                        142.8 <span class="text-xs text-slate-500 not-italic mb-2 uppercase">nm</span>
+                    </div>
+                </div>
+
+                <div id="hud-2" class="hud-float absolute bottom-1/4 left-0 glass-card p-6 rounded-[2.5rem] shadow-2xl">
+                    <div class="text-[10px] text-yellow-500 font-black uppercase tracking-widest mb-1">Crank Speed</div>
+                    <div class="text-3xl font-black italic tracking-tighter">14,200 <span class="text-xs text-slate-500 opacity-50 uppercase">rpm</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-32 relative bg-[#050505]">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-24 gap-8 reveal">
+                <div class="space-y-4">
+                    <h2 class="text-5xl md:text-7xl font-black italic uppercase tracking-tighter">
+                        SPECIALIZED <span class="text-red-600">LAB</span>
+                    </h2>
+                    <p class="text-slate-500 font-bold uppercase tracking-[0.4em] text-sm">Advanced Diagnostic & Tuning Services</p>
+                </div>
+                <div class="h-1 bg-yellow-500 w-32 hidden md:block"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Service Cards with Staggered Reveal -->
+                <div class="service-card p-10 rounded-[3.5rem] glass-card border-none transition-all duration-500 group hover:-translate-y-4 reveal" style="transition-delay: 100ms;">
+                    <div class="icon-box w-16 h-16 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center mb-8">
+                        <i class="fas fa-atom text-2xl group-hover:text-black"></i>
+                    </div>
+                    <h3 class="text-2xl font-black italic uppercase mb-2 tracking-tighter group-hover:text-yellow-500 transition-colors">FI Cleaning</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6">Ultrasonic cleaning and pressure testing for optimal fuel atomization.</p>
+                    <div class="flex justify-between items-center pt-6 border-t border-white/5">
+                        <span class="text-[10px] font-black uppercase text-slate-500">Service Fee</span>
+                        <span class="text-xl font-black italic text-white">₱500+</span>
+                    </div>
+                </div>
+
+                <div class="service-card p-10 rounded-[3.5rem] glass-card border-none transition-all duration-500 group hover:-translate-y-4 reveal" style="transition-delay: 200ms;">
+                    <div class="icon-box w-16 h-16 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center mb-8">
+                        <i class="fas fa-dharmachakra text-2xl group-hover:text-black"></i>
+                    </div>
+                    <h3 class="text-2xl font-black italic uppercase mb-2 tracking-tighter group-hover:text-yellow-500 transition-colors">CVT Tuning</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6">Custom pulley surfacing and weight matching for smooth power delivery.</p>
+                    <div class="flex justify-between items-center pt-6 border-t border-white/5">
+                        <span class="text-[10px] font-black uppercase text-slate-500">Service Fee</span>
+                        <span class="text-xl font-black italic text-white">₱350+</span>
+                    </div>
+                </div>
+
+                <div class="service-card p-10 rounded-[3.5rem] glass-card border-none transition-all duration-500 group hover:-translate-y-4 reveal" style="transition-delay: 300ms;">
+                    <div class="icon-box w-16 h-16 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center mb-8">
+                        <i class="fas fa-screwdriver-wrench text-2xl group-hover:text-black"></i>
+                    </div>
+                    <h3 class="text-2xl font-black italic uppercase mb-2 tracking-tighter group-hover:text-yellow-500 transition-colors">Overhaul</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6">Full engine blueprinting and high-performance part assembly.</p>
+                    <div class="flex justify-between items-center pt-6 border-t border-white/5">
+                        <span class="text-[10px] font-black uppercase text-slate-500">Consult</span>
+                        <span class="text-xl font-black italic text-white uppercase text-sm">BOOK</span>
+                    </div>
+                </div>
+
+                <div class="service-card p-10 rounded-[3.5rem] glass-card border-none transition-all duration-500 group hover:-translate-y-4 reveal" style="transition-delay: 400ms;">
+                    <div class="icon-box w-16 h-16 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center mb-8">
+                        <i class="fas fa-laptop-code text-2xl group-hover:text-black"></i>
+                    </div>
+                    <h3 class="text-2xl font-black italic uppercase mb-2 tracking-tighter group-hover:text-yellow-500 transition-colors">ECU Remap</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6">Unlock ignition timing and fuel maps for aggressive throttle response.</p>
+                    <div class="flex justify-between items-center pt-6 border-t border-white/5">
+                        <span class="text-[10px] font-black uppercase text-slate-500">Service Fee</span>
+                        <span class="text-xl font-black italic text-white">₱2,500</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance Stats Section -->
+    <section class="py-24 bg-black overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-12">
+            <div class="text-center space-y-4 reveal-left">
+                <div class="text-6xl font-black text-yellow-500 italic">500+</div>
+                <div class="text-xs font-bold tracking-[0.3em] uppercase opacity-50">Engines Tuned</div>
+            </div>
+            <div class="text-center space-y-4 reveal">
+                <div class="text-6xl font-black text-white italic">100%</div>
+                <div class="text-xs font-bold tracking-[0.3em] uppercase opacity-50">FI Compatibility</div>
+            </div>
+            <div class="text-center space-y-4 reveal-right">
+                <div class="text-6xl font-black text-red-600 italic">#1</div>
+                <div class="text-xs font-bold tracking-[0.3em] uppercase opacity-50">In Bacoor</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black pt-32 pb-16 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-yellow-500/50 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20 relative z-10 reveal">
+            <div class="col-span-1 lg:col-span-2 space-y-10">
+                <div class="flex items-center gap-4">
+                    <img src="New Project (2).png" alt="Logo" class="w-16 h-16 object-contain">
+                    <span class="text-4xl font-black italic uppercase tracking-tighter">Rafjan<span class="text-yellow-500">Motorshop</span></span>
+                </div>
+                <p class="text-slate-400 max-w-md text-xl italic font-medium leading-relaxed">Bacoor's specialized workshop for riders who demand more from their machines. We tune for speed, we build for life.</p>
+                <div class="flex gap-4">
+                    <a href="https://www.facebook.com/rafjan.motorshop/" class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center border border-white/5 hover:border-blue-500 hover:scale-110 transition-all hover:text-blue-500 shadow-2xl"><i class="fab fa-facebook-f text-xl"></i></a>
+                    <a href="#" class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center border border-white/5 hover:border-pink-500 hover:scale-110 transition-all hover:text-pink-500 shadow-2xl"><i class="fab fa-instagram text-xl"></i></a>
+                </div>
+            </div>
+            
+            <div class="space-y-8">
+                <h4 class="text-xs font-black uppercase tracking-[0.5em] text-yellow-500/50">Location</h4>
+                <div class="space-y-6">
+                    <div class="flex items-start gap-4 text-slate-300">
+                        <i class="fas fa-map-location-dot text-red-600 mt-1 text-xl"></i>
+                        <span class="font-bold text-lg">Bacoor, Cavite,<br/>Philippines</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-slate-300">
+                        <i class="fas fa-headset text-green-500 text-xl"></i>
+                        <span class="font-black">+63 9XX XXX XXXX</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-8">
+                <h4 class="text-xs font-black uppercase tracking-[0.5em] text-yellow-500/50">Operations</h4>
+                <ul class="space-y-4 text-slate-400 font-bold">
+                    <li class="flex justify-between border-b border-white/5 pb-2"><span>Monday - Saturday</span> <span class="text-white italic">08:00 - 17:00</span></li>
+                    <li class="flex justify-between text-red-500/50 italic"><span>Sunday</span> <span>CLOSED</span></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-6 border-t border-white/5 mt-24 pt-10 text-[10px] font-black tracking-[0.4em] text-slate-600 flex justify-between items-center">
+            <p>© 2024 RAFJAN MOTORSHOP BACOOR. ENGINEERED BY PASSION.</p>
+            <div class="flex gap-4 uppercase">
+                <span class="text-yellow-500">Core Engine V2.4</span>
+                <span class="opacity-30">|</span>
+                <span>Stable Build</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for Scroll Animations
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        // Targeted elements to observe
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Navbar & Parallax Effects
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            const scroll = window.scrollY;
+
+            // Nav background change
+            if (scroll > 50) {
+                nav.classList.add('bg-black/90', 'backdrop-blur-2xl', 'py-3', 'border-white/10');
+                nav.classList.remove('py-8', 'border-transparent');
+            } else {
+                nav.classList.remove('bg-black/90', 'backdrop-blur-2xl', 'py-3', 'border-white/10');
+                nav.classList.add('py-8', 'border-transparent');
+            }
+
+            // HUD & Gear Parallax
+            const hud1 = document.getElementById('hud-1');
+            const hud2 = document.getElementById('hud-2');
+            
+            if (hud1 && hud2) {
+                hud1.style.transform = `translateY(${scroll * 0.12}px) translateZ(20px)`;
+                hud2.style.transform = `translateY(-${scroll * 0.08}px) translateZ(-10px)`;
+            }
+        });
+
+        // Initialize HUD positions to prevent jump on first scroll
+        document.addEventListener('DOMContentLoaded', () => {
+            window.scrollTo(0, 0);
+        });
+    </script>
+</body>
+</html>
